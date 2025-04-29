@@ -13,6 +13,7 @@ def conexao():
     return conn
 
 
+
 # Função para iniciar o banco de dados, criando a tabela filmes_series SE NÃO EXISTIR
 def iniciar_db():
     with conexao() as conn: 

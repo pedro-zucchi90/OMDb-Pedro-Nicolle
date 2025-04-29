@@ -1,6 +1,7 @@
 Flask
 psycopg[binary]
 requests
+json 
 
 #as dependências que precisa instalar. 
 #rodar o comando 'pip install -r requirements.txt' para instalar tudo
