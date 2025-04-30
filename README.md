@@ -81,7 +81,7 @@ OMDB_API_KEY = 'sua_chave_omdb'</code></pre>
 
 <hr>
 
-<h2 style="text-align: center;">Fluxo Geral de funcionamento</h2>
+<h2 style="text-align: center;">Fluxo geral de funcionamento</h2>
 
 <h3>/buscar/nome</h3>
 <ol>
