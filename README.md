@@ -9,12 +9,12 @@
 
 <h2 style="text-align: center;">Tecnologias utilizadas</h2>
 <ul>
-  <li>Python 3</li>
-  <li>Flask</li>
-  <li>PostgreSQL</li>
-  <li>psycopg</li>
-  <li>requests</li>
-  <li>OMDB API</li>
+  <img src="https://img.shields.io/badge/Python_3-3776AB?style=for-the-badge&logo=python&logoColor=FFD43B" alt="Python 3">
+  <img src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white" alt="Flask">
+  <img src="https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
+  <img src="https://img.shields.io/badge/psycopg-2C5C86?style=for-the-badge" alt="psycopg">
+  <img src="https://img.shields.io/badge/requests-FABF2C?style=for-the-badge&logo=python&logoColor=black" alt="requests">
+  <img src="https://img.shields.io/badge/OMDb_API-D35400?style=for-the-badge" alt="OMDb API">
 </ul>
 
 <hr>
