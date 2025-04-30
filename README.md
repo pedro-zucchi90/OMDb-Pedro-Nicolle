@@ -1,202 +1,166 @@
-Este projeto é um trabalho de Desenvolvimento Web do terceiro ano (turma 3F). Foi feita uma API em Flask que permite **buscar filmes e séries** pelo nome ou pelo ID do IMDb.  
-Os dados são consultados primeiro em um **banco de dados PostgreSQL** local. Se não forem encontrados, a API **consulta o OMDB** (Open Movie Database) e **armazena automaticamente** os dados para futuras buscas.
+<h1 style="text-align: center;">Projeto: API de Filmes e Séries</h1>
 
----
+<p style="text-align: center;">Trabalho de Desenvolvimento Web — 3º ano (Turma 3F)</p>
 
-## Tecnologias utilizadas
+<p>Este projeto consiste em uma API feita com Flask que permite <strong>buscar filmes e séries</strong> pelo nome ou pelo ID do IMDb.</p>
+<p>Os dados são consultados primeiro em um <strong>banco de dados PostgreSQL</strong>. Caso não estejam armazenados, a API consulta a <strong>OMDb API</strong> e salva os resultados para buscas futuras.</p>
 
-- Python 3
-- Flask
-- PostgreSQL
-- psycopg
-- requests
-- OMDB API
+<hr>
 
----
+<h2 style="text-align: center;">Tecnologias utilizadas</h2>
+<ul>
+  <li>Python 3</li>
+  <li>Flask</li>
+  <li>PostgreSQL</li>
+  <li>psycopg</li>
+  <li>requests</li>
+  <li>OMDB API</li>
+</ul>
 
-## Estrutura do projeto
+<hr>
 
-```
+<h2 style="text-align: center;">Estrutura do projeto</h2>
+<pre><code>
 |-- app.py               # Código principal do Flask
 |-- db.py                # Conexão e inicialização do banco de dados
 |-- omdb_service.py      # Comunicação com a API OMDB
 |-- config.py            # Configurações (chave da API OMDB, informações do banco)
 |-- requirements.txt     # Dependências do projeto
 |-- README.md            # Documentação do projeto
+</code></pre>
 
-```
+<hr>
 
---- 
+<h2 style="text-align: center;">Configuração do ambiente</h2>
+<ol>
+  <li><strong>Clone o repositório</strong>
+    <pre><code>git clone https://github.com/seu-usuario/seu-repositorio.git
+cd seu-repositorio</code></pre>
+  </li>
 
-## Configuração do ambiente
-1. **Clone o repositório**
-   ```bash
-   git clone https://github.com/seu-usuario/seu-repositorio.git
-   cd seu-repositorio
-   ```
+  <li><strong>Crie e ative o ambiente virtual (.venv)</strong>
+    <pre><code>python -m venv .venv</code></pre>
+    <p><strong>No Windows:</strong></p>
+    <pre><code>.venv\Scripts\activate</code></pre>
+    <p><strong>No Linux/Mac:</strong></p>
+    <pre><code>source .venv/bin/activate</code></pre>
+  </li>
 
-2. **Crie e ative o ambiente virtual (.venv)**
+  <li><strong>Instale as dependências</strong>
+    <pre><code>pip install -r requirements.txt</code></pre>
+  </li>
 
-   ```bash
-   python -m venv .venv
-   ```
+  <li><strong>Configure o arquivo <code>config.py</code></strong>
+    <p>Crie um arquivo <code>config.py</code> na raiz do projeto com o seguinte conteúdo:</p>
+    <pre><code>DB_NAME = 'seu_banco'
+DB_USER = 'seu_usuario'
+DB_PASSWORD = 'sua_senha'
+DB_HOST = 'localhost'
+DB_PORT = '5432'
 
-   - **No Windows**:
-     ```bash
-     .venv\Scripts\activate
-     ```
-   - **No Linux/Mac**:
-     ```bash
-     source .venv/bin/activate
-     ```
+OMDB_API_KEY = 'sua_chave_omdb'</code></pre>
+    <p>Você pode obter sua chave da OMDB em: 
+    <a href="http://www.omdbapi.com/apikey.aspx" target="_blank">http://www.omdbapi.com/apikey.aspx</a></p>
+  </li>
 
-3. **Instale as dependências**
-   ```bash
-   pip install -r requirements.txt
-   ```
+  <li><strong>Configure o banco de dados PostgreSQL</strong>
+    <p>Certifique-se de que o PostgreSQL esteja rodando localmente.</p>
+    <p>O projeto automaticamente cria a tabela <code>filmes_series</code> ao iniciar.</p>
+  </li>
+</ol>
 
-4. **Configure o arquivo `config.py`**
+<hr>
 
-   Crie um arquivo `config.py` na raiz do projeto com o seguinte conteúdo:
+<h2 style="text-align: center;">Executando a aplicação</h2>
 
-   ```python
-   # config.py
+<p style="text-align: center;"><strong>No terminal da pasta do projeto:</strong></p>
+<pre style="text-align: center;"><code>python app.py</code></pre>
 
-   DB_NAME = 'seu_banco'
-   DB_USER = 'seu_usuario'
-   DB_PASSWORD = 'sua_senha'
-   DB_HOST = 'localhost'
-   DB_PORT = '5432'
+<p style="text-align: center;">Acesse em:</p>
+<pre style="text-align: center;"><code>http://localhost:5000</code></pre>
 
-   OMDB_API_KEY = 'sua_chave_omdb'
-   ```
+<hr>
 
-   > Você pode obter sua chave da OMDB em [http://www.omdbapi.com/apikey.aspx](http://www.omdbapi.com/apikey.aspx).
+<h2 style="text-align: center;">Endpoints disponíveis</h2>
 
-5. **Configure o banco de dados PostgreSQL**
+<h3>/buscar/nome</h3>
+<ul>
+  <li><strong>Endpoint:</strong> <code>/buscar/nome</code></li>
+  <li><strong>Método:</strong> <code>GET</code></li>
+  <li><strong>Parâmetro:</strong> <code>nome</code></li>
+  <li><strong>Exemplo:</strong>
+    <pre><code>GET http://localhost:5000/buscar/nome?nome=Oppenheimer</code></pre>
+  </li>
+</ul>
 
-   Certifique-se de ter o PostgreSQL rodando localmente.  
-   O projeto automaticamente cria a tabela `filmes_series` se ela não existir ao iniciar.
+<h3>/buscar/id</h3>
+<ul>
+  <li><strong>Endpoint:</strong> <code>/buscar/id</code></li>
+  <li><strong>Método:</strong> <code>GET</code></li>
+  <li><strong>Parâmetro:</strong> <code>id</code></li>
+  <li><strong>Exemplo:</strong>
+    <pre><code>GET http://localhost:5000/buscar/id?id=tt15398776</code></pre>
+  </li>
+</ul>
 
----
+<hr>
 
-## Executando a aplicação
+<h2 style="text-align: center;">Explicação do sistema</h2>
 
-Com todas as configurações feitas, e no terminal da pasta `cache-filmes-series`:
+<h3>1. app.py</h3>
+<p>Define duas rotas principais para busca:</p>
+<ul>
+  <li><code>/buscar/nome</code></li>
+  <li><code>/buscar/id</code></li>
+</ul>
+<p>Lógica geral:</p>
+<ul>
+  <li>Valida parâmetros</li>
+  <li>Consulta o banco</li>
+  <li>Se não achar, consulta OMDb e armazena</li>
+</ul>
 
-```bash
-python app.py
-```
+<h3>2. db.py</h3>
+<ul>
+  <li>Funções para conectar ao banco e criar a tabela</li>
+</ul>
 
-A aplicação ficará disponível em:
+<h3>3. config.py</h3>
+<ul>
+  <li>Define variáveis de configuração (segregadas para segurança e organização)</li>
+</ul>
 
-```
-http://localhost:5000
-```
+<h3>4. omdb_service.py</h3>
+<ul>
+  <li>Funções para fazer requisições GET para a OMDb por nome ou ID</li>
+</ul>
 
----
+<hr>
 
-## Endpoints disponíveis:
+<h2 style="text-align: center;">Fluxo de funcionamento</h2>
 
-### Buscar filme ou série pelo **nome**
+<h3>/buscar/nome</h3>
+<ol>
+  <li>Valida o parâmetro <code>nome</code></li>
+  <li>Consulta local com <code>ILIKE</code></li>
+  <li>Se não encontrado:
+    <ul>
+      <li>Consulta OMDb</li>
+      <li>Se encontrado, armazena e retorna</li>
+      <li>Se não, retorna 404</li>
+    </ul>
+  </li>
+</ol>
 
-- **Endpoint**: `/buscar/nome`
-- **Método**: `GET`
-- **Parâmetro**: `nome`
-- **Exemplo**:
-  ```
-  GET http://localhost:5000/buscar/nome?nome=Oppenheimer
-  ```
-
----
-
-### Buscar filme ou série pelo **ID do IMDb**
-
-- **Endpoint**: `/buscar/id`
-- **Método**: `GET`
-- **Parâmetro**: `id`
-- **Exemplo**:
-  ```
-  GET http://localhost:5000/buscar/id?id=tt15398776
-  ```
-
----
-
-## EXPLICAÇÃO DO SISTEMA
-
-### 1. `app.py`
-
-Esse arquivo é o que juntoa tudo na aplicação. Ele define duas rotas:
-- `/buscar/nome`: que busca por nome do filme ou série.
-- `/buscar/id`: que busca por ID do IMDb.
-
-Ambas seguem esta **lógica geral**:
-- Validam o parâmetro fornecido na URL.
-- Buscam no banco de dados usando SQL.
-- Se encontrarem, retornam os dados armazenados.
-- Se **não** encontrarem, usam a OMDb API.
-- Salvam a resposta no banco de dados para futuras requisições.
-- Retornam os dados como JSON.
-
-A função `init_db()` é chamada ao iniciar o app: ela cria a tabela no banco **se ainda não existir uma com o mesmo nome**.
-
----
-
-### 2. `db.py`
-
-Esse arquivo centraliza duas funções:
-- `conexao()`: retorna uma instância de conexão PostgreSQL, usando as configurações do `config.py`.
-- `init_db()`: cria a tabela `filmes_series` com colunas específicas como `imdb_id`, `titulo`, `ano`, `tipo`, `dados` (JSON), etc. Usa `CREATE TABLE IF NOT EXISTS`, ou seja, **não cria duplicatas**.
-
-A vantagem é que a estrutura é definida apenas uma vez e reaproveitada pelo app.
-
----
-
-### 3. `config.py`
-
-Contém:
-- Dados da conexão com o banco de dados (nome, usuário, senha, host, porta).
-- A chave da API do OMDb.
-
-Esse arquivo isola informações sensíveis e facilita a alteração do ambiente sem tocar na lógica do app.
-
----
-
-### 4. `omdb_service.py`
-
-Esse arquivo oferece duas funções:
-- `buscar_filme_nome(nome)`: consulta a API OMDb passando o **título**.
-- `buscar_filme_id(imdb_id)`: consulta a API OMDb passando o **ID do IMDb**.
-
-Ambas funções:
-- Constroem a URL com base nos parâmetros e na chave da API.
-- Enviam uma requisição HTTP.
-- Se a resposta for 200 (sucesso), retornam os dados convertidos de JSON.
-- Caso contrário, retornam `None`.
-
----
-
-## DETALHAMENTO DAS REQUISIÇÕES
-
-### `/buscar/nome`
-1. Verifica se o parâmetro `nome` está presente na URL.
-2. Usa o `ILIKE` (case-insensitive) para procurar no banco o campo `titulo`.
-3. Se encontrar, retorna o conteúdo da coluna `dados` (JSONB).
-4. Se não encontrar:
-   - Chama `buscar_filme_nome()` para consultar a OMDb API.
-   - Se encontrar:
-     - Insere os dados completos na tabela com `INSERT ... ON CONFLICT DO NOTHING` (evita duplicatas pelo `imdb_id`).
-     - Retorna os dados ao usuário.
-   - Se a OMDb não encontrar, retorna erro 404.
-
-### `/buscar/id`
-1. Verifica se o parâmetro `id` está presente na URL.
-2. Procura no banco o `imdb_id` correspondente.
-3. Se encontrar, retorna os dados.
-4. Se não encontrar:
-   - Chama `buscar_filme_id()` na OMDb API.
-   - Se encontrar:
-     - Insere os dados na tabela.
-     - Retorna ao usuário.
-   - Se a OMDb não encontrar, retorna erro 404.
-
+<h3>/buscar/id</h3>
+<ol>
+  <li>Valida o parâmetro <code>id</code></li>
+  <li>Consulta local</li>
+  <li>Se não encontrado:
+    <ul>
+      <li>Consulta OMDb</li>
+      <li>Se encontrado, armazena e retorna</li>
+      <li>Se não, retorna 404</li>
+    </ul>
+  </li>
+</ol>
