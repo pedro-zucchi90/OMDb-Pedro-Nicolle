@@ -81,59 +81,134 @@ OMDB_API_KEY = 'sua_chave_omdb'</code></pre>
 
 <hr>
 
-<h2 style="text-align: center;">Endpoints disponíveis</h2>
+<h2 style="text-align: center;">Explicação do Sistema</h2>
 
-<h3>/buscar/nome</h3>
+<h3><code>app.py</code></h3>
+<p>Este arquivo define as rotas principais para a busca de filmes ou séries, realizando a consulta tanto no banco de dados quanto na API OMDb, caso necessário.</p>
+
+<h4>Lógica Geral:</h4>
+<ul>
+  <li><strong>Validação de Parâmetros:</strong> Verifica se os parâmetros necessários (nome ou id) são fornecidos na requisição.</li>
+  <li><strong>Consulta ao Banco de Dados:</strong> Tenta buscar os dados no banco de dados local.</li>
+  <li><strong>Consulta à OMDb:</strong> Se o filme ou série não for encontrado no banco, realiza uma consulta à API OMDb e armazena os dados no banco de dados.</li>
+</ul>
+
+<h4>Endpoints Disponíveis</h4>
+
+<h5><code>/buscar/nome</code></h5>
 <ul>
   <li><strong>Endpoint:</strong> <code>/buscar/nome</code></li>
   <li><strong>Método:</strong> <code>GET</code></li>
   <li><strong>Parâmetro:</strong> <code>nome</code></li>
-  <li><strong>Exemplo:</strong>
-    <pre><code>GET http://localhost:5000/buscar/nome?nome=Oppenheimer</code></pre>
-  </li>
+  <li><strong>Exemplo:</strong></li>
 </ul>
 
-<h3>/buscar/id</h3>
+<pre><code>GET http://localhost:5000/buscar/nome?nome=Oppenheimer</code></pre>
+
+<p><strong>Funcionamento:</strong></p>
+<ol>
+  <li>Recebe o parâmetro <code>nome</code> da requisição.</li>
+  <li>Tenta buscar no banco de dados por um título que contenha o nome fornecido.</li>
+  <li>Caso não encontre, realiza uma requisição à API OMDb para buscar os dados do filme ou série.</li>
+  <li>Se a busca for bem-sucedida, armazena os dados no banco de dados para futuras consultas.</li>
+  <li>Retorna os dados do filme ou série em formato JSON.</li>
+</ol>
+
+<h5><code>/buscar/id</code></h5>
 <ul>
   <li><strong>Endpoint:</strong> <code>/buscar/id</code></li>
   <li><strong>Método:</strong> <code>GET</code></li>
   <li><strong>Parâmetro:</strong> <code>id</code></li>
-  <li><strong>Exemplo:</strong>
-    <pre><code>GET http://localhost:5000/buscar/id?id=tt15398776</code></pre>
-  </li>
+  <li><strong>Exemplo:</strong></li>
 </ul>
 
-<hr>
+<pre><code>GET http://localhost:5000/buscar/id?id=tt15398776</code></pre>
 
-<h2 style="text-align: center;">Explicação do sistema</h2>
+<p><strong>Funcionamento:</strong></p>
+<ol>
+  <li>Recebe o parâmetro <code>id</code> da requisição.</li>
+  <li>Tenta buscar no banco de dados pelo <code>imdb_id</code>.</li>
+  <li>Caso não encontre, faz uma requisição à API OMDb com o ID fornecido.</li>
+  <li>Se a busca for bem-sucedida, armazena os dados no banco de dados.</li>
+  <li>Retorna as informações em formato JSON.</li>
+</ol>
 
-<h3>1. app.py</h3>
-<p>Define duas rotas principais para busca:</p>
+<h3><code>db.py</code></h3>
+<p>Contém funções responsáveis pela conexão com o banco de dados e pela inicialização da tabela <code>filmes_series</code> se ela não existir.</p>
+
 <ul>
-  <li><code>/buscar/nome</code></li>
-  <li><code>/buscar/id</code></li>
-</ul>
-<p>Lógica geral:</p>
-<ul>
-  <li>Valida parâmetros</li>
-  <li>Consulta o banco</li>
-  <li>Se não achar, consulta OMDb e armazena</li>
+  <li><strong>Função <code>conexao()</code>:</strong> Estabelece uma conexão com o banco de dados utilizando as configurações definidas em <code>config.py</code>.</li>
+  <li><strong>Função <code>init_db()</code>:</strong> Cria a tabela <code>filmes_series</code> no banco de dados, caso ela não exista: <code> CREATE TABLE IF NOT EXISTS</code></li>
 </ul>
 
-<h3>2. db.py</h3>
+<pre><code>import psycopg
+from config import DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
+
+def conexao():
+    conn = psycopg.connect(
+        dbname=DB_NAME,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        host=DB_HOST,
+        port=DB_PORT
+    ) 
+    return conn
+
+def init_db():
+    with conexao() as conn: 
+        with conn.cursor() as cur: 
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS filmes_series (
+                    id SERIAL PRIMARY KEY, 
+                    imdb_id VARCHAR(20) UNIQUE,
+                    titulo TEXT,
+                    ano TEXT,
+                    tipo TEXT,
+                    dados JSONB,
+                    total_temporadas INTEGER, 
+                    idioma TEXT,
+                    pais TEXT,
+                    premios TEXT,
+                    poster TEXT,
+                    avaliacoes JSONB,
+                    metascore TEXT,
+                    avaliacao_imdb TEXT,
+                    votos_imdb TEXT
+                );
+            """) 
+        conn.commit()</code></pre>
+
+<h3><code>config.py</code></h3>
+<p>Este arquivo contém as variáveis de configuração do sistema, como as credenciais para o banco de dados e a chave da API OMDb. Essas variáveis são segregadas para garantir maior segurança e organização.</p>
+
+<h3><code>omdb_service.py</code></h3>
+<p>Contém funções responsáveis por fazer requisições GET para a API OMDb, tanto para buscar filmes e séries pelo nome quanto pelo ID do IMDb.</p>
+
+<h4>Funções:</h4>
 <ul>
-  <li>Funções para conectar ao banco e criar a tabela</li>
+  <li><strong><code>buscar_filme_nome(nome)</code></strong>: Faz uma requisição GET à API OMDb para buscar um filme ou série pelo nome.</li>
+  <li><strong><code>buscar_filme_id(imdb_id)</code></strong>: Faz uma requisição GET à API OMDb para buscar um filme ou série pelo ID do IMDb.</li>
 </ul>
 
-<h3>3. config.py</h3>
-<ul>
-  <li>Define variáveis de configuração (segregadas para segurança e organização)</li>
-</ul>
+<pre><code>import requests
+from config import OMDB_API_KEY
 
-<h3>4. omdb_service.py</h3>
-<ul>
-  <li>Funções para fazer requisições GET para a OMDb por nome ou ID</li>
-</ul>
+def buscar_filme_nome(nome):
+    url = f"http://www.omdbapi.com/?apikey={OMDB_API_KEY}&t={nome}" 
+    resposta = requests.get(url)
+
+    if resposta.status_code == 200:
+        return resposta.json()
+    return None
+
+def buscar_filme_id(imdb_id):
+    url = f"http://www.omdbapi.com/?apikey={OMDB_API_KEY}&i={imdb_id}" 
+    resposta = requests.get(url)
+
+    if resposta.status_code == 200:
+        return resposta.json()
+    return None
+</code></pre>
 
 <hr>
 
