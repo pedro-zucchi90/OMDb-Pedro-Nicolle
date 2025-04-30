@@ -119,3 +119,84 @@ http://localhost:5000
   ```
   GET http://localhost:5000/buscar/id?id=tt15398776
   ```
+
+---
+
+## EXPLICAÇÃO DO SISTEMA
+
+### 1. `app.py`
+
+Esse arquivo é o que juntoa tudo na aplicação. Ele define duas rotas:
+- `/buscar/nome`: que busca por nome do filme ou série.
+- `/buscar/id`: que busca por ID do IMDb.
+
+Ambas seguem esta **lógica geral**:
+- Validam o parâmetro fornecido na URL.
+- Buscam no banco de dados usando SQL.
+- Se encontrarem, retornam os dados armazenados.
+- Se **não** encontrarem, usam a OMDb API.
+- Salvam a resposta no banco de dados para futuras requisições.
+- Retornam os dados como JSON.
+
+A função `init_db()` é chamada ao iniciar o app: ela cria a tabela no banco **se ainda não existir uma com o mesmo nome**.
+
+---
+
+### 2. `db.py`
+
+Esse arquivo centraliza duas funções:
+- `conexao()`: retorna uma instância de conexão PostgreSQL, usando as configurações do `config.py`.
+- `init_db()`: cria a tabela `filmes_series` com colunas específicas como `imdb_id`, `titulo`, `ano`, `tipo`, `dados` (JSON), etc. Usa `CREATE TABLE IF NOT EXISTS`, ou seja, **não cria duplicatas**.
+
+A vantagem é que a estrutura é definida apenas uma vez e reaproveitada pelo app.
+
+---
+
+### 3. `config.py`
+
+Contém:
+- Dados da conexão com o banco de dados (nome, usuário, senha, host, porta).
+- A chave da API do OMDb.
+
+Esse arquivo isola informações sensíveis e facilita a alteração do ambiente sem tocar na lógica do app.
+
+---
+
+### 4. `omdb_service.py`
+
+Esse arquivo oferece duas funções:
+- `buscar_filme_nome(nome)`: consulta a API OMDb passando o **título**.
+- `buscar_filme_id(imdb_id)`: consulta a API OMDb passando o **ID do IMDb**.
+
+Ambas funções:
+- Constroem a URL com base nos parâmetros e na chave da API.
+- Enviam uma requisição HTTP.
+- Se a resposta for 200 (sucesso), retornam os dados convertidos de JSON.
+- Caso contrário, retornam `None`.
+
+---
+
+## DETALHAMENTO DAS REQUISIÇÕES
+
+### `/buscar/nome`
+1. Verifica se o parâmetro `nome` está presente na URL.
+2. Usa o `ILIKE` (case-insensitive) para procurar no banco o campo `titulo`.
+3. Se encontrar, retorna o conteúdo da coluna `dados` (JSONB).
+4. Se não encontrar:
+   - Chama `buscar_filme_nome()` para consultar a OMDb API.
+   - Se encontrar:
+     - Insere os dados completos na tabela com `INSERT ... ON CONFLICT DO NOTHING` (evita duplicatas pelo `imdb_id`).
+     - Retorna os dados ao usuário.
+   - Se a OMDb não encontrar, retorna erro 404.
+
+### `/buscar/id`
+1. Verifica se o parâmetro `id` está presente na URL.
+2. Procura no banco o `imdb_id` correspondente.
+3. Se encontrar, retorna os dados.
+4. Se não encontrar:
+   - Chama `buscar_filme_id()` na OMDb API.
+   - Se encontrar:
+     - Insere os dados na tabela.
+     - Retorna ao usuário.
+   - Se a OMDb não encontrar, retorna erro 404.
+
