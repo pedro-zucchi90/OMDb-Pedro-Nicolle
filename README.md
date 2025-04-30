@@ -81,6 +81,36 @@ OMDB_API_KEY = 'sua_chave_omdb'</code></pre>
 
 <hr>
 
+<h2 style="text-align: center;">Fluxo Geral de funcionamento</h2>
+
+<h3>/buscar/nome</h3>
+<ol>
+  <li>Valida o parâmetro <code>nome</code></li>
+  <li>Consulta local com <code>ILIKE</code></li>
+  <li>Se não encontrado:
+    <ul>
+      <li>Consulta OMDb</li>
+      <li>Se encontrado, armazena e retorna</li>
+      <li>Se não, retorna 404</li>
+    </ul>
+  </li>
+</ol>
+
+<h3>/buscar/id</h3>
+<ol>
+  <li>Valida o parâmetro <code>id</code></li>
+  <li>Consulta local</li>
+  <li>Se não encontrado:
+    <ul>
+      <li>Consulta OMDb</li>
+      <li>Se encontrado, armazena e retorna</li>
+      <li>Se não, retorna 404</li>
+    </ul>
+  </li>
+</ol>
+
+<hr>
+
 <h2 style="text-align: center;">Explicação do Sistema</h2>
 
 <h3><code>app.py</code></h3>
@@ -209,33 +239,3 @@ def buscar_filme_id(imdb_id):
         return resposta.json()
     return None
 </code></pre>
-
-<hr>
-
-<h2 style="text-align: center;">Fluxo de funcionamento</h2>
-
-<h3>/buscar/nome</h3>
-<ol>
-  <li>Valida o parâmetro <code>nome</code></li>
-  <li>Consulta local com <code>ILIKE</code></li>
-  <li>Se não encontrado:
-    <ul>
-      <li>Consulta OMDb</li>
-      <li>Se encontrado, armazena e retorna</li>
-      <li>Se não, retorna 404</li>
-    </ul>
-  </li>
-</ol>
-
-<h3>/buscar/id</h3>
-<ol>
-  <li>Valida o parâmetro <code>id</code></li>
-  <li>Consulta local</li>
-  <li>Se não encontrado:
-    <ul>
-      <li>Consulta OMDb</li>
-      <li>Se encontrado, armazena e retorna</li>
-      <li>Se não, retorna 404</li>
-    </ul>
-  </li>
-</ol>
