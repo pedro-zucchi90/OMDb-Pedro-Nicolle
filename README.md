@@ -1,6 +1,6 @@
-<h1 style="text-align: center;">Projeto: API de Filmes e Séries</h1>
+<h1 style="text-align: center;">API: Cache de Filmes e Séries com OMDb</h1>
 
-<p style="text-align: center;">Trabalho de Desenvolvimento Web — 3º ano (Turma 3F)</p>
+<p style="text-align: center;">Desenvolvimento Web — Turma 3F</p>
 
 <p>Este projeto consiste em uma API feita com Flask que permite <strong>buscar filmes e séries</strong> pelo nome ou pelo ID do IMDb.</p>
 <p>Os dados são consultados primeiro em um <strong>banco de dados PostgreSQL</strong>. Caso não estejam armazenados, a API consulta a <strong>OMDb API</strong> e salva os resultados para buscas futuras.</p>
