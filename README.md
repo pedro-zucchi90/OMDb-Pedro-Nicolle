@@ -10,10 +10,10 @@
 <h2 style="text-align: center;">Tecnologias utilizadas</h2>
 <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
   <img src="https://img.shields.io/badge/Python_3-%233776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3">
-  <img src="https://img.shields.io/badge/Flask-%23222222?style=for-the-badge&logo=flask&logoColor=white" alt="Flask">
-  <img src="https://img.shields.io/badge/PostgreSQL-%23336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
   <img src="https://img.shields.io/badge/psycopg-%23304998?style=for-the-badge&logo=python&logoColor=white" alt="psycopg">
   <img src="https://img.shields.io/badge/requests-%23000000?style=for-the-badge&logo=python&logoColor=yellow" alt="requests">
+  <img src="https://img.shields.io/badge/Flask-%23222222?style=for-the-badge&logo=flask&logoColor=white" alt="Flask">
+  <img src="https://img.shields.io/badge/PostgreSQL-%23336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
   <img src="https://img.shields.io/badge/OMDb_API-%23D35400?style=for-the-badge&logo=imdb&logoColor=white" alt="OMDb API">
 </div>
 
