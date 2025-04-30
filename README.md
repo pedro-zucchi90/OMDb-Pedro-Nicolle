@@ -9,13 +9,26 @@
 
 <h2 style="text-align: center;">Tecnologias utilizadas</h2>
 <ul>
-  <img src="https://img.shields.io/badge/Python_3-3776AB?style=for-the-badge&logo=python&logoColor=FFD43B" alt="Python 3">
-  <img src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white" alt="Flask">
-  <img src="https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
-  <img src="https://img.shields.io/badge/psycopg-2C5C86?style=for-the-badge" alt="psycopg">
-  <img src="https://img.shields.io/badge/requests-FABF2C?style=for-the-badge&logo=python&logoColor=black" alt="requests">
-  <img src="https://img.shields.io/badge/OMDb_API-D35400?style=for-the-badge" alt="OMDb API">
+  <li>
+    <img src="https://img.shields.io/badge/Python_3-%233776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3">
+  </li>
+  <li>
+    <img src="https://img.shields.io/badge/Flask-%23222222?style=for-the-badge&logo=flask&logoColor=white" alt="Flask">
+  </li>
+  <li>
+    <img src="https://img.shields.io/badge/PostgreSQL-%23336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
+  </li>
+  <li>
+    <img src="https://img.shields.io/badge/psycopg-%23304998?style=for-the-badge&logo=python&logoColor=white" alt="psycopg">
+  </li>
+  <li>
+    <img src="https://img.shields.io/badge/requests-%23000000?style=for-the-badge&logo=python&logoColor=yellow" alt="requests">
+  </li>
+  <li>
+    <img src="https://img.shields.io/badge/OMDb_API-%23D35400?style=for-the-badge&logo=imdb&logoColor=white" alt="OMDb API">
+  </li>
 </ul>
+
 
 <hr>
 
